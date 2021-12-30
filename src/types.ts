@@ -28,7 +28,7 @@ export type MetaData = {
    */
   color?: string;
   /**
-   * Page type
+   * Page type, usually sets with og:type
    */
   type?:
     | "website"
@@ -37,7 +37,7 @@ export type MetaData = {
     | "book"
     | "music"
     | "video"
-    | "string";
+    | string;
 };
 
 export type OpenGraph = {
