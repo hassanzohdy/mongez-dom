@@ -1,8 +1,13 @@
 import { MetaData, OpenGraph } from "./types";
 
-const metaData = {
-  title: null,
+const currentMetaData = {
+  title: document.title,
+  url: null,
   description: null,
+  keywords: null,
+  image: null,
+  color: null,
+  favIcon: null,
 };
 
 /**
@@ -113,9 +118,9 @@ export function itemprop(name, value) {
  * @param   {string} pageTitle
  */
 export function setTitle(pageTitle) {
-  if (metaData.title === pageTitle) return pageTitle;
+  if (currentMetaData.title === pageTitle) return pageTitle;
 
-  document.title = metaData.title = pageTitle;
+  document.title = currentMetaData.title = pageTitle;
 
   meta("og:title", pageTitle);
   meta("og:image:alt", pageTitle);
@@ -130,7 +135,7 @@ export function setTitle(pageTitle) {
  * @param {string} title
  */
 export function setDescription(description) {
-  if (metaData.description === description) return description;
+  if (currentMetaData.description === description) return description;
 
   meta("description", description);
   itemprop("description", description);
@@ -149,6 +154,10 @@ export function setKeywords(keywords: string | string[]) {
   if (Array.isArray(keywords)) {
     keywords = keywords.join(",");
   }
+
+  if (currentMetaData.keywords === keywords) return;
+
+  currentMetaData.keywords = keywords;
 
   return meta("keywords", keywords);
 }
@@ -175,21 +184,14 @@ export function og(ogOptions: OpenGraph) {}
  * @param string imagePath
  */
 export function setImage(imagePath) {
+  if (currentMetaData.image === imagePath) return;
+
+  currentMetaData.image = imagePath;
+
   meta("image", imagePath);
   meta("og:image", imagePath);
   meta("twitter:image", imagePath);
   itemprop("image", imagePath);
-}
-
-/**
- * Set meta url
- *
- * @param string url
- * @returns void
- */
-export function setUrl(url) {
-  meta("og:url", url);
-  meta("twitter:url", url);
 }
 
 /**
@@ -199,6 +201,10 @@ export function setUrl(url) {
  * @returns {void}
  */
 export function setPageColor(color: string) {
+  if (currentMetaData.color === color) return;
+
+  currentMetaData.color = color;
+
   return meta("theme-color", color);
 }
 
@@ -209,7 +215,24 @@ export function setPageColor(color: string) {
  * @returns void
  */
 export function setFavIcon(favIcon) {
+  if (currentMetaData.favIcon === favIcon) return;
+
+  currentMetaData.color = favIcon;
+
   return metaLink("icon", favIcon);
+}
+
+/**
+ * Get current meta data
+ * If no arguments passed, then return the entire object
+ *
+ * @param name
+ * @returns any
+ */
+export function getMetaData(name?: keyof MetaData): any {
+  if (!name) return currentMetaData;
+
+  return currentMetaData[name];
 }
 
 /**
@@ -218,7 +241,12 @@ export function setFavIcon(favIcon) {
  * @param {string} url
  */
 export function setCanonicalUrl(url: string) {
+  if (currentMetaData.url === url) return;
+
+  currentMetaData.color = url;
+
   metaLink("canonical", url);
+  meta("twitter:url", url);
   meta("og:url", url);
 }
 

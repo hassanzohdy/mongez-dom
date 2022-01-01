@@ -224,6 +224,24 @@ type MetaData = {
 };
 ```
 
+## Get current meta data
+
+To get the current stored meta data, use `getMetaData` function.
+
+```js
+import { getMetaData } from '@mongez/dom';
+
+getMetaData('title'); // returns the current title
+```
+
+To get the entire meta data object, do not pass any arguments to the function.
+
+```js
+import { getMetaData } from '@mongez/dom';
+
+getMetaData(); // returns {title: 'some-title', color: null,...}
+```
+
 ## Detects if user's device is in dark mode
 
 ```js
