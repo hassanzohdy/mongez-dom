@@ -44,3 +44,7 @@ export type OpenGraph = {
   siteName?: string;
   locale?: string;
 };
+
+export type AttributesList = {
+  [attributeKey: string]: string;
+};

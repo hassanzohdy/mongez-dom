@@ -311,6 +311,28 @@ export default function MyInput() {
 }
 ```
 
+## Css Variable
+
+We can easily set or get a css variable by using `cssVariable`.
+
+```ts
+import { cssVariable } from '@mognez/dom';
+
+// set color-primary
+cssVariable('--color-primary', '#F00');
+
+// get color primary
+
+console.log(
+    cssVariable('--color-primary')
+); // #F00
+```
+
+## Change Log
+
+- 1.0.6 (02/01/2022)
+  - Added [Css Variable Function](#css-variable)
+
 ## TODO
 
 - Add Unit Tests.
