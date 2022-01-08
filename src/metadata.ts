@@ -1,4 +1,4 @@
-import { MetaData, OpenGraph } from "./types";
+import { AttributesList, MetaData, OpenGraph } from "./types";
 
 const currentMetaData = {
   title: document.title,
@@ -40,13 +40,42 @@ export function createNewMeta(props) {
 /**
  * Update html element attributes
  *
- * @param   {object} attributes
+ * @param {AttributesList} attributes
  * @returns {void}
  */
-export function setHTMLAttributes(attributes: { [key: string]: any }) {
+export function setHTMLAttributes(attributes: AttributesList): void {
+  return setElementAttributes(document.documentElement, attributes);
+}
+
+/**
+ * Set the given attributes to the given element
+ *
+ * @param {HTMLElement} element
+ * @param {AttributesList} attributes
+ * @returns {void}
+ */
+export function setElementAttributes(
+  element: HTMLElement,
+  attributes: AttributesList
+): void {
   for (const attribute in attributes) {
-    document.documentElement.setAttribute(attribute, attributes[attribute]);
+    element.setAttribute(attribute, attributes[attribute]);
   }
+}
+
+/**
+ * Get current element dom attributes
+ *
+ * @return object
+ */
+export function getElementAttributes(element: HTMLElement): AttributesList {
+  const attributesList: AttributesList = {};
+
+  for (const attribute of element.attributes) {
+    attributesList[attribute.name] = attribute.value;
+  }
+
+  return attributesList;
 }
 
 /**

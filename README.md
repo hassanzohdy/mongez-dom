@@ -139,6 +139,23 @@ Outputs:
 <meta name="theme-color" content="#000" />
 ```
 
+## Set Element Attributes
+
+This will allow you to set attributes to any DOM Element by passing plain objects of element in second element.
+
+```js
+
+import { setElementAttributes } from '@mongez/dom';
+
+const anchor = document.getElementById('my-anchor');
+
+setElementAttributes(anchor, {
+    id: 'new-id',
+    href: 'https://google.com',
+    target: '_blank',
+});
+```
+
 ## Setting HTML Attributes
 
 ```js
@@ -157,6 +174,26 @@ Outputs:
 <html lang="en" dir="ltr" app="MyApp">
     ...
 </html>
+```
+
+## Get Element Attributes
+
+Get element attributes list using `getElementAttributes`
+
+```js
+import { getElementAttributes } from '@mongez/dom';
+
+console.log(getElementAttributes(document.documentElement)); 
+```
+
+Based on previous example it will be something like:
+
+```json
+{
+    "lang": "en",
+    "dir": "ltr",
+    "app": "MyApp"
+}
 ```
 
 ## Combine meta data in one function
@@ -330,6 +367,9 @@ console.log(
 
 ## Change Log
 
+- 1.0.7 (08/01/2022)
+  - Added [Set Element Attributes](#set-element-attributes)
+  - Added [Get Element Attributes](#get-element-attributes)
 - 1.0.6 (02/01/2022)
   - Added [Css Variable Function](#css-variable)
 

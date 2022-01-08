@@ -46,5 +46,5 @@ export type OpenGraph = {
 };
 
 export type AttributesList = {
-  [attributeKey: string]: string;
+  [attributeKey: string]: any;
 };
