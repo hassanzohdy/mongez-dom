@@ -348,6 +348,82 @@ export default function MyInput() {
 }
 ```
 
+## Stylesheet
+
+You may update or generate a new stylesheet link tag using `styleSheet` utility, this will generate a new link and append it to the head tag.
+
+```ts
+import { styleSheet } from '@mongez/dom';
+
+styleSheet('https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css');
+```
+
+This will generate a new link with a generated random id added as an attribute to that link tag, so the output would be something like:
+
+```html
+<link rel="stylesheet" id="link-2597813" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+```
+
+You may specify the id attribute as second value, the function will search for that id, if found then it will replace the href attribute only.
+
+```ts
+import { styleSheet } from '@mongez/dom';
+
+// Bootstrap 5
+styleSheet('https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css', 'ui-framework-cdn'); // generates a new link tag 
+```
+
+```html
+<link rel="stylesheet" id="ui-framework-cdn" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+```
+
+You can replace the href link tag again with same id but different href.
+
+```ts
+import { styleSheet } from '@mongez/dom';
+
+// Bootstrap 5
+styleSheet('https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css', 'ui-framework-cdn'); // generates a new link tag 
+
+// Only update the link href attribute to Semantic ui
+styleSheet('https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css', 'ui-framework-cdn'); // generates a new link tag 
+```
+
+Output:
+
+```html
+<link rel="stylesheet" id="ui-framework-cdn" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+```
+
+## Google fonts
+
+Another similar to `styleSheet` feature is using `googleFont` utility, this will generate a link html tag with a `preconnect` attribute.
+
+Second argument also accepts an id.
+
+```ts
+
+import { googleFont } from '@mongez/dom';
+
+// Roboto Font
+googleFont('https://fonts.googleapis.com/css2?family=Roboto', 'primary-font'); 
+// Open Sans Font
+googleFont('https://fonts.googleapis.com/css2?family=Open+Sans', 'secondary-font'); 
+```
+
+This will generate the following tags:
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link rel="stylesheet" id="primary-font" href="https://fonts.googleapis.com/css2?family=Roboto">
+<link rel="stylesheet" id="secondary-font" href="https://fonts.googleapis.com/css2?family=Open+Sans">
+```
+
+For more information about adding these two additional tags, please read [this article](https://www.cdnplanet.com/blog/faster-google-webfonts-preconnect/#:%7E:text=The%20preconnect%20hint,-Preconnect%20is%20one&text=Initiating%20an%20early%20connection%2C%20which,and%20improves%20Google%20Fonts%20performance).
+
+> The `preconnect` tags will be generated only once with the first call of `googleFont` function.
+
 ## Css Variable
 
 We can easily set or get a css variable by using `cssVariable`.
@@ -367,10 +443,13 @@ console.log(
 
 ## Change Log
 
-- 1.0.7 (08/01/2022)
+- 1.0.9 (15 Jan 2022)
+  - Added [styleSheet](#stylesheet) function.
+  - Added [googleFont](#google-font) function.
+- 1.0.7 (08 Jan 2022)
   - Added [Set Element Attributes](#set-element-attributes)
   - Added [Get Element Attributes](#get-element-attributes)
-- 1.0.6 (02/01/2022)
+- 1.0.6 (02 Jan 2022)
   - Added [Css Variable Function](#css-variable)
 
 ## TODO

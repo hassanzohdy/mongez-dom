@@ -301,3 +301,62 @@ export function metaLink(
 
   return link;
 }
+
+/**
+ * Add stylesheet or update it.
+ * If id is passed, then find the link with that id, otherwise create new meta link tag
+ */
+export function styleSheet(
+  href: string,
+  id: string | null = null
+): HTMLLinkElement {
+  let link: HTMLLinkElement | null;
+  if (id) {
+    link = document.getElementById(id) as HTMLLinkElement;
+    if (link && link.getAttribute("rel").toLocaleLowerCase() !== "stylesheet") {
+      link = null;
+    }
+  }
+
+  if (!link) {
+    link = createHeadElement("link", {
+      rel: "stylesheet",
+      id: id || "link-" + String(Math.floor(Math.random() * 10000000)),
+    }) as HTMLLinkElement;
+  }
+
+  link.href = href;
+
+  return link;
+}
+
+let isGoogleFontInitialized: boolean = false;
+
+function initializeGoogleFonts(): void {
+  createHeadElement("link", {
+    rel: "preconnect",
+    href: "https://fonts.googleapis.com",
+  });
+  createHeadElement("link", {
+    rel: "preconnect",
+    href: "https://fonts.gstatic.com",
+    crossOrigin: "",
+  });
+
+  isGoogleFontInitialized = true;
+}
+
+/**
+ * Add Google font or update it.
+ * If id is passed, then find the link with that id, otherwise create new meta link tag
+ */
+export function googleFont(
+  href: string,
+  id: string | null = null
+): HTMLLinkElement {
+  if (!isGoogleFontInitialized) {
+    initializeGoogleFonts();
+  }
+
+  return styleSheet(href, id);
+}
