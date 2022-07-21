@@ -370,6 +370,8 @@ styleSheet(
 
 This will generate a new link with a generated random id added as an attribute to that link tag, so the output would be something like:
 
+output:
+
 ```html
 <link
   rel="stylesheet"
@@ -389,6 +391,8 @@ styleSheet(
   "ui-framework-cdn"
 ); // generates a new link tag
 ```
+
+output:
 
 ```html
 <link
@@ -465,6 +469,144 @@ For more information about adding these two additional tags, please read [this a
 
 > The `preconnect` tags will be generated only once with the first call of `googleFont` function.
 
+## Load Font
+
+> Added in V1.1.0
+
+The `loadFont` function allows you to load font either externally or internally, but it's highly used with internally fonts.
+
+### Usage
+
+```ts
+import { loadFont } from "@mongez/dom";
+import lightFontWoff from "./fonts/font-light.woff";
+import lightFontWoff2 from "./fonts/font-light.woff2";
+import fontWoff from "./fonts/font.woff";
+import fontWoff2 from "./fonts/font.woff2";
+
+loadFont({
+  name: "base-font",
+  weights: [
+    {
+      weight: "light",
+      woff: lightFontWoff,
+      woff2: lightFontWoff2,
+    },
+    {
+      weight: "normal",
+      woff: fontWoff,
+      woff2: fontWoff2,
+    },
+  ],
+});
+```
+
+Allowed font files extensions are: `woff`, `woff2`, `eot` , `ttf`, `otf` and `svg`.
+
+If you're not sure what is the type of the font you may just pass `src` to the weight object.
+
+```ts
+import { loadFont } from "@mongez/dom";
+import lightFont from "./fonts/lightFont.ttf";
+import normalFont from "./fonts/font.ttf";
+
+loadFont({
+  name: "base-font",
+  weights: [
+    {
+      weight: "light",
+      src: lightFont,
+    },
+    {
+      weight: "normal",
+      src: normalFont,
+    },
+  ],
+});
+```
+
+If all font weights is in one file, just pass the `src` directly to the function.
+
+```ts
+import { loadFont } from "@mongez/dom";
+import font from "./fonts/font.ttf";
+
+loadFont({
+  name: "base-font",
+  src: font,
+});
+```
+
+You can also set the font src as url as well.
+
+Any other font style can be passed as well to the [font face descriptors](https://developer.mozilla.org/en-US/docs/Web/API/FontFace/FontFace).
+
+When adding single font file the `loadFont` object can be like this:
+
+```ts
+type FontOptions = {
+  /**
+   * Font family name
+   */
+  name: string;
+  /**
+   * font src path
+   */
+  src?: string;
+  /**
+   * Font face descriptors
+   */
+  descriptors?: FontFaceDescriptors;
+};
+```
+
+When adding multiple weights, the `loadFont` accepts the following features
+
+```ts
+type FontWeightSetup = FontFaceDescriptors & {
+  /**
+   * Font url, a generic url, can be added exactly as in the font-family `src` property.
+   */
+  src?: string;
+  /**
+   * Font url for woff (Web Open Font Format)
+   */
+  woff?: string;
+  /**
+   * Font url for woff2 (Web Open Font Format 2)
+   */
+  woff2?: string;
+  /**
+   * Font url for true type
+   */
+  ttf?: string;
+  /**
+   * Font url for eot (embedded-open type font)
+   */
+  eot?: string;
+  /**
+   * Font url for svg (vector-data)
+   */
+  svg?: string;
+  /**
+   * Font url for otf (open type font)
+   */
+  otf?: string;
+};
+
+type FontOptions = {
+  /**
+   * Font family name
+   */
+  name: string;
+  /**
+   * For more advanced fonts configurations, use the weights object instead of src.
+   * Font weights
+   */
+  weights?: FontWeightSetup[];
+};
+```
+
 ## Css Variable
 
 We can easily set or get a css variable by using `cssVariable`.
@@ -482,32 +624,32 @@ console.log(cssVariable("--color-primary")); // #F00
 
 ### Set Css variable
 
-If you would like to set a css variable to certain element, you may use `setCssvariable`
+If you would like to set a css variable to certain element, you may use `setCssVariable`
 
 ```ts
-import { setCssvariable } from "@mongez/dom";
+import { setCssVariable } from "@mongez/dom";
 
 // set color-primary
-setCssvariable("--color-primary", "#F00", document.body);
+setCssVariable("--color-primary", "#F00", document.body);
 ```
 
-This will set `--color-pirmary` variable to the body element.
-
+This will set `--color-primary` variable to the body element.
 
 ### Get Css variable
 
-If you would like to get a css variable to certain element, you may use `getCssvariable`
+If you would like to get a css variable to certain element, you may use `getCssVariable`
 
 ```ts
-import { getCssvariable } from "@mongez/dom";
+import { getCssVariable } from "@mongez/dom";
 
 // get color-primary
-getCssvariable("--color-primary", document.body); // "#F00"
+getCssVariable("--color-primary", document.body); // "#F00"
 ```
-
 
 ## Change Log
 
+- 1.1.1 (21 July 2022)
+  - Added [loadFont](#load-font) function.
 - 1.0.11 (3 Apr 2022)
   - Added [setCssVariable](#set-css-variable) function.
   - Added [getCssVariable](#get-css-variable) function.
