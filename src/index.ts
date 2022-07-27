@@ -6,4 +6,14 @@ export { default as scrollTo } from "./scrollTo";
 export { default as loadScript } from "./loadScript";
 export { default as htmlToText } from "./htmlToText";
 export { default as userPrefersDarkMode } from "./prefers-dark-mode";
-export { default as cssVariable, setCssVariable, getCssVariable } from "./css-variable";
+export {
+  default as cssVariable,
+  setCssVariable,
+  getCssVariable,
+} from "./css-variable";
+
+// fonts
+export * from "./fonts";
+
+// dimensions
+export * from "./dimensions";

@@ -646,9 +646,69 @@ import { getCssVariable } from "@mongez/dom";
 getCssVariable("--color-primary", document.body); // "#F00"
 ```
 
+## getWindowWidth
+
+`getWindowWidth(): number`
+
+> Added in 1.1.0
+
+This function will return the current window's outer width.
+
+```ts
+import { getWindowWidth } from "@mongez/dom";
+
+console.log(getWindowWidth()); // 1024
+```
+
+## getWindowHeight
+
+`getWindowHeight(): number`
+
+> Added in 1.1.0
+
+This function will return the current window's outer height.
+
+```ts
+import { getWindowHeight } from "@mongez/dom";
+
+console.log(getWindowHeight()); // 760
+```
+
+## getScreenWidth
+
+`getScreenWidth(): number`
+
+> Added in 1.1.0
+
+This function will return the current screen's width.
+
+```ts
+import { getScreenWidth } from "@mongez/dom";
+
+console.log(getScreenWidth()); // 1024
+```
+
+## getScreenWidth
+
+`getScreenHeight(): number`
+
+> Added in 1.1.0
+
+This function will return the current screen's height.
+
+```ts
+import { getScreenHeight } from "@mongez/dom";
+
+console.log(getScreenHeight()); // 760
+```
+
 ## Change Log
 
-- 1.1.1 (21 July 2022)
+- 1.1.0 (21 July 2022)
+  - Added [getWindowWidth](#getWindowWidth) function.
+  - Added [getWindowHeight](#getWindowHeight) function.
+  - Added [getScreenWidth](#getScreenWidth) function.
+  - Added [getScreenHeight](#getScreenHeight) function.
   - Added [loadFont](#load-font) function.
 - 1.0.11 (3 Apr 2022)
   - Added [setCssVariable](#set-css-variable) function.
