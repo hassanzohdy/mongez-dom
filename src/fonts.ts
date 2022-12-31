@@ -56,7 +56,7 @@ export function loadFont(
         }
 
         if (fontWeight.ttf) {
-          sources.push(`url(${fontWeight.woff2}) format("truetype")`);
+          sources.push(`url(${fontWeight.ttf}) format("truetype")`);
         }
 
         if (fontWeight.eot) {
@@ -64,11 +64,11 @@ export function loadFont(
         }
 
         if (fontWeight.svg) {
-          sources.push(`url(${fontWeight.woff2}) format("svg")`);
+          sources.push(`url(${fontWeight.svg}) format("svg")`);
         }
 
         if (fontWeight.otf) {
-          sources.push(`url(${fontWeight.woff2}) format("opentype")`);
+          sources.push(`url(${fontWeight.otf}) format("opentype")`);
         }
 
         const src: string = sources.join(", ");
