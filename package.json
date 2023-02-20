@@ -1,6 +1,6 @@
 {
     "name": "@mongez/dom",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "description": "General dom utilities and meta data manager.",
     "main": "src/index.ts",
     "keywords": [
