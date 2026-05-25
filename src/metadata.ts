@@ -104,7 +104,7 @@ export function createHeadElement(tagName, props) {
  * @param {string} value
  */
 export function meta(metaName, value) {
-  const attributeName = ["keywords", "description"].includes(metaName)
+  const attributeName = ["keywords", "description", "theme-color"].includes(metaName)
     ? "name"
     : "property";
 
@@ -246,7 +246,7 @@ export function setPageColor(color: string) {
 export function setFavIcon(favIcon) {
   if (currentMetaData.favIcon === favIcon) return;
 
-  currentMetaData.color = favIcon;
+  currentMetaData.favIcon = favIcon;
 
   return metaLink("icon", favIcon);
 }
@@ -272,7 +272,7 @@ export function getMetaData(name?: keyof MetaData): any {
 export function setCanonicalUrl(url: string) {
   if (currentMetaData.url === url) return;
 
-  currentMetaData.color = url;
+  currentMetaData.url = url;
 
   metaLink("canonical", url);
   meta("twitter:url", url);

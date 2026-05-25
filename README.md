@@ -1,732 +1,239 @@
-# DOM Utilities
+# @mongez/dom
 
-This package provides various utilities that makes working with dom much easier.
+> Browser-side DOM utilities: page metadata, fonts, stylesheets, CSS variables, keyboard helpers, viewport dimensions, and small DOM conveniences.
 
-## Installation
+`@mongez/dom` is the collection of imperative browser helpers that almost every front-end project ends up writing by hand — `setTitle`, `setPageMeta`, `googleFont`, `cssVariable`, `scrollTo`, `loadScript`, `pressed`, `getWindowWidth`, etc. They're flat function exports, side-effect-free at import time, and framework-agnostic — drop them into React, Vue, Svelte, Astro, or vanilla JS the same way.
 
-`yarn add @mongez/dom`
+The package targets the browser. Calling these on the server (no `document`, no `window.matchMedia`, no `FontFace`) will throw — pair with a render guard if you ship server-rendered apps.
 
-Or
+## Install
 
-`npm i @mongez/dom`
-
-## Usage
-
-Let's start with handling With metadata.
-
-### Setting Page title
-
-```js
-import { setTitle } from "@mongez/dom";
-
-setTitle("Hello World");
+```sh
+yarn add @mongez/dom
 ```
 
-This function modifies the page title, along with adding `meta[og:title]` `meta[witter:title]` and `meta[itemprop="name"]` meta tags.
+No runtime dependencies.
 
-Outputs:
+## A 30-second tour
 
-```html
-<title>Hello World</title>
+```ts
+import {
+  setPageMeta,
+  cssVariable,
+  googleFont,
+  scrollTo,
+  pressed,
+  ENTER_KEY,
+  userPrefersDarkMode,
+} from "@mongez/dom";
 
-<meta property="og:title" content="Hello World" />
-<meta property="og:image:alt" content="Hello World" />
-<meta property="twitter:title" content="Hello World" />
-<meta property="twitter:image:alt" content="Hello World" />
-<meta itemprop="name" content="Hello World" />
-```
+// 1. Manage the page's <head> in one call.
+setPageMeta({
+  title: "Product Page",
+  description: "Buy widget X today.",
+  image: "https://cdn.example.com/product.png",
+  url: "https://example.com/product",
+  type: "website",
+});
 
-### Setting Page Description
+// 2. Read/write CSS variables on :root.
+cssVariable("--color-primary", userPrefersDarkMode() ? "#fff" : "#000");
 
-```js
-import { setDescription } from "@mongez/dom";
+// 3. Load a Google font with the recommended preconnect tags.
+googleFont("https://fonts.googleapis.com/css2?family=Inter", "ui-font");
 
-setDescription("Hello World Page Description from other realms.");
-```
+// 4. Smooth-scroll to a CSS selector.
+scrollTo("#section-features");
 
-This function modifies the page meta description, along with adding `meta[og:description]` `meta[witter:description]` and `meta[itemprop="description"]` meta tags.
-
-Outputs:
-
-```html
-<meta
-  name="description"
-  content="Hello World Page Description from other realms."
-/>
-<meta
-  property="og:description"
-  content="Hello World Page Description from other realms."
-/>
-<meta
-  property="twitter:description"
-  content="Hello World Page Description from other realms."
-/>
-<meta
-  itemprop="name"
-  content="Hello World Page Description from other realms."
-/>
-```
-
-### Setting Page keywords
-
-```js
-import { setKeywords } from "@mongez/dom";
-
-setKeywords("hello,world,from,other,worlds");
-// can also be sent as an array
-setKeywords(["hello", "world", "from", "other", "worlds"]);
-```
-
-This function modifies the page meta keywords.
-
-Outputs:
-
-```html
-<meta name="keywords" content="hello,world,from,other,worlds." />
-```
-
-### Setting Canonical Url
-
-```js
-import { setCanonicalUrl } from "@mongez/dom";
-
-setCanonicalUrl("https://site-name.com/page-url-path");
-```
-
-This function sets the page Canonical Url.
-
-Outputs:
-
-```html
-<link rel="canonical" href="https://site-name.com/page-url-path" />
-<meta property="og:url" href="https://site-name.com/page-url-path" />
-```
-
-### Setting Page image
-
-```js
-import { setImage } from "@mongez/dom";
-
-setImage("https://site-name.com/page-image.png");
-```
-
-This function sets the page current image that can be used for page preview, it modifies `meta.image` `meta[og:image]` `meta[witter:image]` and `meta[itemprop="image"]` meta tags.
-
-Outputs:
-
-```html
-<meta property="image" content="https://site-name.com/page-image.png" />
-<meta property="og:image" content="https://site-name.com/page-image.png" />
-<meta property="twitter:image" content="https://site-name.com/page-image.png" />
-<meta itemprop="image" content="https://site-name.com/page-image.png" />
-```
-
-## Setting Page Favicon
-
-```js
-import { setFavIcon } from "@mongez/dom";
-
-setFavIcon("https://site-name.com/favicon.ico");
-```
-
-Outputs:
-
-```html
-<link rel="icon" href="https://site-name.com/favicon.ico" />
-```
-
-## Setting Page Color
-
-Setting the page color is useful when working with mobile apps as it changes the header background.
-
-```js
-import { setPageColor } from "@mongez/dom";
-
-setPageColor("#000");
-```
-
-Outputs:
-
-```html
-<meta name="theme-color" content="#000" />
-```
-
-## Set Element Attributes
-
-This will allow you to set attributes to any DOM Element by passing plain objects of element in second element.
-
-```js
-import { setElementAttributes } from "@mongez/dom";
-
-const anchor = document.getElementById("my-anchor");
-
-setElementAttributes(anchor, {
-  id: "new-id",
-  href: "https://google.com",
-  target: "_blank",
+// 5. Keyboard helpers without remembering keyCode magic numbers.
+document.addEventListener("keydown", e => {
+  if (pressed(e, ENTER_KEY)) submit();
 });
 ```
 
-## Setting HTML Attributes
+## What's in the box
 
-```js
-import { setHTMLAttributes } from "@mongez/dom";
+| Area | Exports |
+|---|---|
+| Page metadata | `setPageMeta`, `setTitle`, `setDescription`, `setKeywords`, `setImage`, `setPageColor`, `setFavIcon`, `setCanonicalUrl`, `getMetaData` |
+| Element attributes | `setHTMLAttributes`, `setElementAttributes`, `getElementAttributes` |
+| Low-level head | `createHeadElement`, `createNewMeta`, `meta`, `itemprop`, `metaLink`, `twitter`, `og` |
+| Stylesheets & fonts | `styleSheet`, `googleFont`, `loadFont` |
+| CSS variables | `cssVariable`, `setCssVariable`, `getCssVariable` |
+| Viewport | `getWindowWidth`, `getWindowHeight`, `getScreenWidth`, `getScreenHeight` |
+| Keyboard | `pressed`, `TAB_KEY`, `ESC_KEY`, `ENTER_KEY`, `CONTROL_KEY` |
+| Misc | `scrollTo`, `loadScript`, `htmlToText`, `userPrefersDarkMode` |
 
-setHTMLAttributes({
-  lang: "en",
-  dir: "ltr",
-  app: "MyApp",
-});
-```
+## Page metadata
 
-Outputs:
+`setPageMeta` is the one-stop entry point. Pass any subset of fields and only those get patched.
 
-```html
-<html lang="en" dir="ltr" app="MyApp">
-  ...
-</html>
-```
-
-## Get Element Attributes
-
-Get element attributes list using `getElementAttributes`
-
-```js
-import { getElementAttributes } from "@mongez/dom";
-
-console.log(getElementAttributes(document.documentElement));
-```
-
-Based on previous example it will be something like:
-
-```json
-{
-  "lang": "en",
-  "dir": "ltr",
-  "app": "MyApp"
-}
-```
-
-## Combine meta data in one function
-
-You can set most of the meta data in just one function called `setPageMeta`
-
-```js
+```ts
 import { setPageMeta } from "@mongez/dom";
 
 setPageMeta({
-  title: "Page Title",
-  description: "Page Description",
-  keywords: "page, keywords, list",
-  image: "page image path",
-  url: "page url",
-  favIcon: "Page favicon",
-  color: "Page color",
-  type: "website",
+  title: "Hello World",
+  description: "An example page.",
+  keywords: ["hello", "world"],          // or "hello,world"
+  image: "https://cdn.example.com/cover.png",
+  url: "https://example.com/page",       // canonical + og:url + twitter:url
+  favIcon: "/favicon.ico",
+  color: "#0a0a0a",                       // theme color
+  type: "article",                        // og:type
 });
 ```
 
-Full list of the page meta as follows:
+Each field fans out to the matching tags. `setTitle("Hi")` emits `<title>`, `og:title`, `og:image:alt`, `twitter:title`, `twitter:image:alt`, and `itemprop="name"`. `setImage("...")` emits `image`, `og:image`, `twitter:image`, and `itemprop="image"`. `setCanonicalUrl("...")` emits `link[rel="canonical"]`, `og:url`, and `twitter:url`.
+
+For one-tag-at-a-time control, the lower-level helpers are also exported:
 
 ```ts
-type MetaData = {
-  /**
-   * Set page title
-   */
-  title?: string;
-  /**
-   * Set page meta description
-   */
-  description?: string;
-  /**
-   * Set page meta image
-   */
-  image?: string;
-  /**
-   * Set page meta keywords
-   */
-  keywords?: string | string[];
-  /**
-   * Set page meta Canonical url
-   */
-  url?: string;
-  /**
-   * Set page meta fav icon
-   */
-  favIcon?: string;
-  /**
-   * Set page meta color
-   */
-  color?: string;
-  /**
-   * Page type, usually sets with og:type
-   */
-  type?:
-    | "website"
-    | "article"
-    | "profile"
-    | "book"
-    | "music"
-    | "video"
-    | string;
-};
+import { meta, itemprop, metaLink, createHeadElement } from "@mongez/dom";
+
+meta("og:type", "article");                      // <meta property="og:type" content="article">
+meta("description", "Page desc");                // <meta name="description" content="Page desc">
+itemprop("name", "Hello World");                 // <meta itemprop="name" content="Hello World">
+metaLink("manifest", "/manifest.webmanifest");   // <link rel="manifest" href="...">
 ```
 
-## Get current meta data
+`meta()` uses `name=` for `keywords` and `description` only; every other name lands on `property=`. Repeat calls update the existing tag instead of duplicating.
 
-To get the current stored meta data, use `getMetaData` function.
+## Element attributes
 
-```js
-import { getMetaData } from "@mongez/dom";
+```ts
+import { setHTMLAttributes, setElementAttributes, getElementAttributes } from "@mongez/dom";
 
-getMetaData("title"); // returns the current title
+setHTMLAttributes({ lang: "en", dir: "ltr", "data-app": "MyApp" });
+// <html lang="en" dir="ltr" data-app="MyApp">
+
+const a = document.getElementById("logo");
+setElementAttributes(a!, { href: "/", target: "_self", "aria-label": "Home" });
+
+getElementAttributes(document.documentElement);
+// { lang: "en", dir: "ltr", "data-app": "MyApp" }
 ```
 
-To get the entire meta data object, do not pass any arguments to the function.
+## Stylesheets and fonts
 
-```js
-import { getMetaData } from "@mongez/dom";
-
-getMetaData(); // returns {title: 'some-title', color: null,...}
-```
-
-## Detects if user's device is in dark mode
-
-```js
-import { userPrefersDarkMode } from "@mongez/dom";
-
-if (userPrefersDarkMode()) {
-  // switch your style to dark mode
-}
-```
-
-## Scroll to element
-
-This will make the browser scrolls to the given element selector with smooth scroll.
-
-```js
-import { scrollTo } from "@mongez/dom";
-
-scrollTo("#my-element");
-```
-
-## Append Javascript File
-
-```js
-import { loadScript } from "@mongez/dom";
-
-loadScript("https://site-name.com/js-file.js", () => {
-  // do something when file is loaded
-});
-```
-
-## Sanitizing HTML to text
-
-Sometimes its useful to get only the text from html code.
-
-```js
-import { htmlToText } from "@mongez/dom";
-
-htmlToText("<h1>Hello World</h1>"); // Hello World
-```
-
-## User keyboard detection
-
-The `pressed` function will allow you to check if the user has pressed on certain keys on keyboard with readable code.
-
-> For demonstration purposes, the following example will be used with React JS.
-
-```jsx
-import { pressed, ESC_KEY, ENTER_KEY, TAB_KEY, CONTROL_KEY } from "@mongez/dom";
-
-export default function MyInput() {
-  const detectUserInput = (e) => {
-    if (pressed(e, ESC_KEY)) {
-      // user pressed on escape key
-    } else if (pressed(e, ENTER_KEY)) {
-      // user pressed on enter key
-    } else if (pressed(e, CONTROL_KEY)) {
-      // user pressed on control key
-    } else if (pressed(e, TAB_KEY)) {
-      // user pressed on tab key
-    }
-  };
-
-  return <input onChange={detectUserInput} />;
-}
-```
-
-## Stylesheet
-
-You may update or generate a new stylesheet link tag using `styleSheet` utility, this will generate a new link and append it to the head tag.
+`styleSheet(href, id?)` appends or updates a `<link rel="stylesheet">`. Pass an id to make subsequent calls patch the same link instead of creating duplicates.
 
 ```ts
 import { styleSheet } from "@mongez/dom";
 
-styleSheet(
-  "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-);
+styleSheet("https://cdn.example.com/bootstrap.css", "ui-framework-cdn");
+styleSheet("https://cdn.example.com/semantic.css", "ui-framework-cdn"); // updates href
 ```
 
-This will generate a new link with a generated random id added as an attribute to that link tag, so the output would be something like:
-
-output:
-
-```html
-<link
-  rel="stylesheet"
-  id="link-2597813"
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-/>
-```
-
-You may specify the id attribute as second value, the function will search for that id, if found then it will replace the href attribute only.
-
-```ts
-import { styleSheet } from "@mongez/dom";
-
-// Bootstrap 5
-styleSheet(
-  "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css",
-  "ui-framework-cdn"
-); // generates a new link tag
-```
-
-output:
-
-```html
-<link
-  rel="stylesheet"
-  id="ui-framework-cdn"
-  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-/>
-```
-
-You can replace the href link tag again with same id but different href.
-
-```ts
-import { styleSheet } from "@mongez/dom";
-
-// Bootstrap 5
-styleSheet(
-  "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css",
-  "ui-framework-cdn"
-); // generates a new link tag
-
-// Only update the link href attribute to Semantic ui
-styleSheet(
-  "https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css",
-  "ui-framework-cdn"
-); // generates a new link tag
-```
-
-Output:
-
-```html
-<link
-  rel="stylesheet"
-  id="ui-framework-cdn"
-  href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
-/>
-```
-
-## Google fonts
-
-Another similar to `styleSheet` feature is using `googleFont` utility, this will generate a link html tag with a `preconnect` attribute.
-
-Second argument also accepts an id.
+`googleFont(href, id?)` wraps `styleSheet` and emits the two recommended `preconnect` links the first time it's called.
 
 ```ts
 import { googleFont } from "@mongez/dom";
 
-// Roboto Font
-googleFont("https://fonts.googleapis.com/css2?family=Roboto", "primary-font");
-// Open Sans Font
-googleFont(
-  "https://fonts.googleapis.com/css2?family=Open+Sans",
-  "secondary-font"
-);
+googleFont("https://fonts.googleapis.com/css2?family=Inter", "primary-font");
+googleFont("https://fonts.googleapis.com/css2?family=Lora", "secondary-font");
 ```
 
-This will generate the following tags:
-
-```html
-<link rel="preconnect" href="https://fonts.googleapis.com/" />
-<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
-<link
-  rel="stylesheet"
-  id="primary-font"
-  href="https://fonts.googleapis.com/css2?family=Roboto"
-/>
-<link
-  rel="stylesheet"
-  id="secondary-font"
-  href="https://fonts.googleapis.com/css2?family=Open+Sans"
-/>
-```
-
-For more information about adding these two additional tags, please read [this article](https://www.cdnplanet.com/blog/faster-google-webfonts-preconnect/#:%7E:text=The%20preconnect%20hint,-Preconnect%20is%20one&text=Initiating%20an%20early%20connection%2C%20which,and%20improves%20Google%20Fonts%20performance).
-
-> The `preconnect` tags will be generated only once with the first call of `googleFont` function.
-
-## Load Font
-
-> Added in V1.1.0
-
-The `loadFont` function allows you to load font either externally or internally, but it's highly used with internally fonts.
-
-### Usage
+`loadFont(options)` uses `FontFace` to load and register a font without the round-trip through CSS.
 
 ```ts
 import { loadFont } from "@mongez/dom";
-import lightFontWoff from "./fonts/font-light.woff";
-import lightFontWoff2 from "./fonts/font-light.woff2";
-import fontWoff from "./fonts/font.woff";
-import fontWoff2 from "./fonts/font.woff2";
+import interWoff2 from "./fonts/inter.woff2";
 
-loadFont({
-  name: "base-font",
+await loadFont({ name: "Inter", src: interWoff2 });
+```
+
+Multiple weights via the `weights` array:
+
+```ts
+await loadFont({
+  name: "Inter",
   weights: [
-    {
-      weight: "light",
-      woff: lightFontWoff,
-      woff2: lightFontWoff2,
-    },
-    {
-      weight: "normal",
-      woff: fontWoff,
-      woff2: fontWoff2,
-    },
+    { weight: "light",  woff2: "./inter-300.woff2" },          // "light" maps to 300
+    { weight: "normal", woff2: "./inter-400.woff2" },
+    { weight: "bold",   woff2: "./inter-700.woff2" },
   ],
 });
 ```
 
-Allowed font files extensions are: `woff`, `woff2`, `eot` , `ttf`, `otf` and `svg`.
+Each weight accepts any of `src`, `woff`, `woff2`, `ttf`, `eot`, `svg`, `otf` plus the rest of the standard `FontFaceDescriptors` (`style`, `display`, `unicodeRange`, …).
 
-If you're not sure what is the type of the font you may just pass `src` to the weight object.
+## CSS variables
 
 ```ts
-import { loadFont } from "@mongez/dom";
-import lightFont from "./fonts/lightFont.ttf";
-import normalFont from "./fonts/font.ttf";
+import { cssVariable, setCssVariable, getCssVariable } from "@mongez/dom";
 
-loadFont({
-  name: "base-font",
-  weights: [
-    {
-      weight: "light",
-      src: lightFont,
-    },
-    {
-      weight: "normal",
-      src: normalFont,
-    },
-  ],
+// One function, dual purpose against :root
+cssVariable("--color-primary", "#f00"); // set
+cssVariable("--color-primary");         // "#f00"
+
+// Explicit setter / getter with an element target
+setCssVariable("--scope", "local", document.body);
+getCssVariable("--scope", document.body); // "local"
+getCssVariable("--scope");                // "" — :root doesn't have it
+```
+
+## Viewport dimensions
+
+```ts
+import {
+  getWindowWidth, getWindowHeight,
+  getScreenWidth, getScreenHeight,
+} from "@mongez/dom";
+
+getWindowWidth();   // window.outerWidth
+getWindowHeight();  // window.outerHeight
+getScreenWidth();   // window.screen.width
+getScreenHeight();  // window.screen.height
+```
+
+## Keyboard helpers
+
+```ts
+import { pressed, ENTER_KEY, ESC_KEY, TAB_KEY, CONTROL_KEY } from "@mongez/dom";
+
+input.addEventListener("keydown", e => {
+  if (pressed(e, ENTER_KEY)) submit();
+  else if (pressed(e, ESC_KEY)) cancel();
 });
 ```
 
-If all font weights is in one file, just pass the `src` directly to the function.
+`pressed(event, keyCode)` reads `event.keyCode` and falls back to `event.charCode`. Constants exposed: `TAB_KEY=9`, `ENTER_KEY=13`, `CONTROL_KEY=17`, `ESC_KEY=27`.
+
+## Misc
 
 ```ts
-import { loadFont } from "@mongez/dom";
-import font from "./fonts/font.ttf";
+import { scrollTo, loadScript, htmlToText, userPrefersDarkMode } from "@mongez/dom";
 
-loadFont({
-  name: "base-font",
-  src: font,
+scrollTo("#features");                              // element.scrollIntoView({ behavior: "smooth" })
+                                                    // no-op when the selector doesn't match
+const tag = loadScript("https://example.com/x.js", () => {
+  // onload
 });
+htmlToText("<h1>Hi</h1>");                          // "Hi"
+userPrefersDarkMode();                              // matchMedia("(prefers-color-scheme: dark)").matches
 ```
 
-You can also set the font src as url as well.
-
-Any other font style can be passed as well to the [font face descriptors](https://developer.mozilla.org/en-US/docs/Web/API/FontFace/FontFace).
-
-When adding single font file the `loadFont` object can be like this:
+## Types
 
 ```ts
-type FontOptions = {
-  /**
-   * Font family name
-   */
-  name: string;
-  /**
-   * font src path
-   */
-  src?: string;
-  /**
-   * Font face descriptors
-   */
-  descriptors?: FontFaceDescriptors;
-};
+import type {
+  MetaData,
+  OpenGraph,
+  AttributesList,
+  FontOptions,
+  FontWeightSetup,
+} from "@mongez/dom";
 ```
 
-When adding multiple weights, the `loadFont` accepts the following features
+`MetaData` is the shape of the argument to `setPageMeta`. `AttributesList` is `Record<string, any>` — used by `setElementAttributes`/`setHTMLAttributes`. `FontOptions` and `FontWeightSetup` configure `loadFont`.
 
-```ts
-type FontWeightSetup = FontFaceDescriptors & {
-  /**
-   * Font url, a generic url, can be added exactly as in the font-family `src` property.
-   */
-  src?: string;
-  /**
-   * Font url for woff (Web Open Font Format)
-   */
-  woff?: string;
-  /**
-   * Font url for woff2 (Web Open Font Format 2)
-   */
-  woff2?: string;
-  /**
-   * Font url for true type
-   */
-  ttf?: string;
-  /**
-   * Font url for eot (embedded-open type font)
-   */
-  eot?: string;
-  /**
-   * Font url for svg (vector-data)
-   */
-  svg?: string;
-  /**
-   * Font url for otf (open type font)
-   */
-  otf?: string;
-};
+## Related packages
 
-type FontOptions = {
-  /**
-   * Font family name
-   */
-  name: string;
-  /**
-   * For more advanced fonts configurations, use the weights object instead of src.
-   * Font weights
-   */
-  weights?: FontWeightSetup[];
-};
-```
+| Package | Purpose |
+|---|---|
+| [`@mongez/react-helmet`](https://github.com/hassanzohdy) | React adapter for page metadata. |
+| [`@mongez/cache`](https://github.com/hassanzohdy) | Browser-side cache (localStorage / sessionStorage / cookies). |
 
-## Css Variable
+## License
 
-We can easily set or get a css variable by using `cssVariable`.
-
-```ts
-import { cssVariable } from "@mongez/dom";
-
-// set color-primary
-cssVariable("--color-primary", "#F00");
-
-// get color primary
-
-console.log(cssVariable("--color-primary")); // #F00
-```
-
-### Set Css variable
-
-If you would like to set a css variable to certain element, you may use `setCssVariable`
-
-```ts
-import { setCssVariable } from "@mongez/dom";
-
-// set color-primary
-setCssVariable("--color-primary", "#F00", document.body);
-```
-
-This will set `--color-primary` variable to the body element.
-
-### Get Css variable
-
-If you would like to get a css variable to certain element, you may use `getCssVariable`
-
-```ts
-import { getCssVariable } from "@mongez/dom";
-
-// get color-primary
-getCssVariable("--color-primary", document.body); // "#F00"
-```
-
-## getWindowWidth
-
-`getWindowWidth(): number`
-
-> Added in 1.1.0
-
-This function will return the current window's outer width.
-
-```ts
-import { getWindowWidth } from "@mongez/dom";
-
-console.log(getWindowWidth()); // 1024
-```
-
-## getWindowHeight
-
-`getWindowHeight(): number`
-
-> Added in 1.1.0
-
-This function will return the current window's outer height.
-
-```ts
-import { getWindowHeight } from "@mongez/dom";
-
-console.log(getWindowHeight()); // 760
-```
-
-## getScreenWidth
-
-`getScreenWidth(): number`
-
-> Added in 1.1.0
-
-This function will return the current screen's width.
-
-```ts
-import { getScreenWidth } from "@mongez/dom";
-
-console.log(getScreenWidth()); // 1024
-```
-
-## getScreenWidth
-
-`getScreenHeight(): number`
-
-> Added in 1.1.0
-
-This function will return the current screen's height.
-
-```ts
-import { getScreenHeight } from "@mongez/dom";
-
-console.log(getScreenHeight()); // 760
-```
-
-## Change Log
-
-- 1.1.0 (21 July 2022)
-  - Added [getWindowWidth](#getWindowWidth) function.
-  - Added [getWindowHeight](#getWindowHeight) function.
-  - Added [getScreenWidth](#getScreenWidth) function.
-  - Added [getScreenHeight](#getScreenHeight) function.
-  - Added [loadFont](#load-font) function.
-- 1.0.11 (3 Apr 2022)
-  - Added [setCssVariable](#set-css-variable) function.
-  - Added [getCssVariable](#get-css-variable) function.
-- 1.0.9 (15 Jan 2022)
-  - Added [styleSheet](#stylesheet) function.
-  - Added [googleFont](#google-font) function.
-- 1.0.7 (08 Jan 2022)
-  - Added [Set Element Attributes](#set-element-attributes)
-  - Added [Get Element Attributes](#get-element-attributes)
-- 1.0.6 (02 Jan 2022)
-  - Added [Css Variable Function](#css-variable)
-
-## TODO
-
-- Add Unit Tests.
-- Enhance Open Graph settings.
-- Enhance Twitter settings.
-- Enhance Favicon sizes.
-- Completing Metadata Docs.
-- Enhance `pressed` function to accept array of buttons, also add more keys in the keys list.
+MIT

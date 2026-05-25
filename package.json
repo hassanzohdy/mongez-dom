@@ -1,12 +1,40 @@
 {
-    "name": "@mongez/dom",
-    "version": "1.1.2",
-    "description": "General dom utilities and meta data manager.",
-    "main": "src/index.ts",
-    "keywords": [
-        "scroll-to-element",
-        "meta-data"
-    ],
-    "author": "hassanzohdy",
-    "license": "MIT"
+  "name": "@mongez/dom",
+  "version": "1.2.0",
+  "description": "Browser-side DOM utilities: page metadata, fonts, stylesheets, CSS variables, keyboard helpers, viewport dimensions, and small DOM conveniences.",
+  "main": "src/index.ts",
+  "sideEffects": false,
+  "author": "hassanzohdy",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hassanzohdy/dom"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "happy-dom": "^15.7.0",
+    "typescript": "^5.4.0",
+    "vitest": "^2.1.0"
+  },
+  "keywords": [
+    "dom",
+    "metadata",
+    "meta-tags",
+    "open-graph",
+    "twitter-cards",
+    "scroll-to-element",
+    "css-variable",
+    "google-fonts",
+    "load-font",
+    "load-script",
+    "stylesheet",
+    "favicon",
+    "page-title",
+    "prefers-dark-mode",
+    "viewport",
+    "html-to-text"
+  ]
 }
