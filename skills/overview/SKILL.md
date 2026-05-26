@@ -84,5 +84,4 @@ useEffect(() => setTitle(props.title), [props.title]);
 
 - **Call `setPageMeta` once per page-view.** It fans out into the seven setter helpers internally. Cheap to repeat — each setter short-circuits when the value matches the last seen value.
 - **Use ids with `styleSheet` and `googleFont`** for any link you might want to replace later (theme switcher, A/B framework swap, …). Without an id you can't find the link again.
-- **Don't rely on `getMetaData("favIcon")` or `getMetaData("url")`.** They reflect setter bugs (see changelog). For now treat these two fields as write-only.
 - **No event subscriptions.** Helpers here are fire-and-forget. If you need to react to attribute changes, use a `MutationObserver` directly.

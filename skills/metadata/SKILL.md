@@ -39,7 +39,7 @@ Pass any subset of fields. Each delegates to a single-purpose helper that's also
 | `image` | `meta[property=image]`, `meta[property=og:image]`, `meta[property=twitter:image]`, `meta[itemprop=image]` |
 | `url` | `link[rel=canonical]`, `meta[property=og:url]`, `meta[property=twitter:url]` |
 | `favIcon` | `link[rel=icon]` |
-| `color` | `meta[property=theme-color]` *(see "Known bugs")* |
+| `color` | `meta[name=theme-color]` |
 | `type` | `meta[property=og:type]` |
 
 ## Per-field helpers
@@ -134,15 +134,4 @@ If you need the React-idiomatic, declarative version of this, see `@mongez/react
 - **`setTitle("X")` called twice does not emit duplicate tags** — the second call short-circuits when the title matches the last cached value.
 - **Arrays of keywords are joined with a literal `,`** — no spaces. If you want `"foo, bar, baz"`, pre-join with `", "` yourself: `setKeywords(keys.join(", "))`.
 - **`setImage` is for social images.** `meta[property="image"]` is unusual — most consumers only look at `og:image` and `twitter:image`. The duplicate `image` tag is harmless but undocumented.
-- **`meta[property="theme-color"]`** is what `setPageColor` produces. The HTML spec actually uses `name=`; user agents currently honor only the `name=` variant. Until fixed, set the tag manually if you need theme-color to work:
-  ```ts
-  import { createHeadElement } from "@mongez/dom";
-  createHeadElement("meta", { name: "theme-color", content: "#000" });
-  ```
-
-## Known bugs
-
-- `getMetaData("favIcon")` always returns the initial empty string — `setFavIcon` writes to `currentMetaData.color` by mistake.
-- `getMetaData("url")` always returns the initial empty string — `setCanonicalUrl` writes to `currentMetaData.color` by mistake.
-
-The DOM is still updated correctly in both cases (the `link[rel=icon]` / `link[rel=canonical]` tags appear with the right href); only the internal cache is wrong. See `src/__tests__/metadata.test.ts` for the documenting tests.
+- **`setPageColor` emits `<meta name="theme-color">`** — the HTML-spec form user agents honor. `meta()` special-cases `"theme-color"` (alongside `"keywords"` and `"description"`) so the attribute is `name=`, not `property=`.
