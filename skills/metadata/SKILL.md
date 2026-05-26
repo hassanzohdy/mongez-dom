@@ -1,7 +1,9 @@
 ---
 name: mongez-dom-metadata
-description: API reference for managing page metadata — title, description, Open Graph, Twitter Card, canonical URL, favicon, and theme color — via setPageMeta and its per-field helpers.
-when_to_use: User imports setPageMeta, setTitle, setDescription, setKeywords, setImage, setPageColor, setFavIcon, setCanonicalUrl, or getMetaData from @mongez/dom. User is setting page title or meta tags, configuring social sharing previews (og:*, twitter:*), updating canonical URL, or reading back previously-set metadata.
+description: |
+  API reference for managing page metadata — title, description, Open Graph, Twitter Card, canonical URL, favicon, and theme color — via `setPageMeta` and its per-field helpers.
+  TRIGGER when: code imports `setPageMeta`, `setTitle`, `setDescription`, `setKeywords`, `setImage`, `setPageColor`, `setFavIcon`, `setCanonicalUrl`, `getMetaData`, or the `MetaData` type from `@mongez/dom`; user asks "how do I set the page title", "how do I update Open Graph / Twitter Card tags", "how do I set the canonical URL", "how do I update the favicon", or "how do I read back page metadata"; `import { setPageMeta, setTitle, ... } from "@mongez/dom"`.
+  SKIP: user needs custom `og:*`, `article:*`, manifest links, or arbitrary `<meta>`/`<link>` tags the high-level setters don't cover — load `mongez-dom-head-elements` instead; React-idiomatic declarative head management belongs to `@mongez/react-helmet`, this package is framework-agnostic DOM; loading stylesheets/fonts/scripts → `mongez-dom-assets`.
 ---
 
 # Page Metadata

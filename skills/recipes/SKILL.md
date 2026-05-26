@@ -1,7 +1,9 @@
 ---
 name: mongez-dom-recipes
-description: Ready-to-copy cross-feature compositions for common @mongez/dom use cases — SPA route metadata, font loading, dark-mode theming, theme switching, smooth-scroll TOC, keyboard shortcuts, consent-gated scripts, article meta, viewport checks, and HTML excerpts.
-when_to_use: User asks for a complete working example combining multiple @mongez/dom features, needs a pattern for SPA page metadata, font loading with CSS variables, dark-mode theme switching via cssVariable, swapping stylesheets, smooth-scroll navigation, dialog keyboard shortcuts, lazy script loading, article Open Graph setup, or HTML excerpt generation.
+description: |
+  Ready-to-copy cross-feature compositions for common `@mongez/dom` use cases — SPA route metadata, multi-weight font loading, dark-mode CSS-variable theming, stylesheet theme switching, smooth-scroll TOC, dialog keyboard shortcuts, consent-gated scripts, article Open Graph, viewport-driven decisions, and HTML excerpt previews.
+  TRIGGER when: code combines two or more of `setPageMeta`, `loadFont`, `googleFont`, `cssVariable`, `styleSheet`, `scrollTo`, `pressed`, `loadScript`, `meta`, `metaLink`, `htmlToText`, or `userPrefersDarkMode` in one file; user asks "how do I drive page metadata from my router", "how do I load multi-weight fonts", "how do I switch themes / dark mode", "how do I build a smooth-scrolling table of contents", "how do I load analytics after consent", "how do I set article Open Graph tags", or "how do I generate an HTML excerpt"; user requests a full working example combining `@mongez/dom` features.
+  SKIP: user only needs reference for a single helper — load `mongez-dom-metadata`, `mongez-dom-head-elements`, `mongez-dom-assets`, or `mongez-dom-interactions` instead; React-idiomatic declarative head management — `@mongez/react-helmet`; this package is framework-agnostic DOM.
 ---
 
 # Recipes

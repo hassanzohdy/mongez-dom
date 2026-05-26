@@ -9,19 +9,25 @@ Every export ships from the package root.
 ## Docs
 
 - [Overview](https://raw.githubusercontent.com/hassanzohdy/dom/main/skills/overview.md): Pitch, install, mental model.
+  - *Auto-trigger:* User asks what `@mongez/dom` is, needs the full API surface, or imports a wide slice for the first time.
 - [README](https://raw.githubusercontent.com/hassanzohdy/dom/main/README.md): Marketing-style index.
 - [Changelog](https://raw.githubusercontent.com/hassanzohdy/dom/main/CHANGELOG.md): Release notes.
 
 ## Reference (by area)
 
 - [Metadata](https://raw.githubusercontent.com/hassanzohdy/dom/main/skills/metadata.md): `setPageMeta`, `setTitle`, `setDescription`, `setKeywords`, `setImage`, `setPageColor`, `setFavIcon`, `setCanonicalUrl`, `getMetaData`, and the social/Open-Graph fan-out.
+  - *Auto-trigger:* Code imports any of `setPageMeta` / `setTitle` / `setDescription` / `getMetaData`, or user asks about page title, Open Graph, Twitter Card, canonical URL, favicon, or theme color.
 - [Head elements](https://raw.githubusercontent.com/hassanzohdy/dom/main/skills/head-elements.md): Lower-level helpers — `createHeadElement`, `createNewMeta`, `meta`, `itemprop`, `metaLink`, `styleSheet`, `twitter`, `og`. Plus the element-attribute helpers `setHTMLAttributes`, `setElementAttributes`, `getElementAttributes`.
+  - *Auto-trigger:* Code imports `createHeadElement` / `meta` / `metaLink` / `itemprop` / `setHTMLAttributes`, or user needs custom `og:*` / manifest links / `html[lang]` / arbitrary element attributes.
 - [Assets](https://raw.githubusercontent.com/hassanzohdy/dom/main/skills/assets.md): Loading external resources — `googleFont`, `loadFont`, `styleSheet`, `loadScript`, `cssVariable`, `setCssVariable`, `getCssVariable`.
+  - *Auto-trigger:* Code imports `googleFont` / `loadFont` / `styleSheet` / `loadScript` / `cssVariable`, or user is loading fonts, swapping themes, or reading/writing CSS custom properties.
 - [Interactions](https://raw.githubusercontent.com/hassanzohdy/dom/main/skills/interactions.md): User-input + viewport helpers — `pressed`, `TAB_KEY`/`ESC_KEY`/`ENTER_KEY`/`CONTROL_KEY`, `scrollTo`, `userPrefersDarkMode`, `htmlToText`, `getWindowWidth`/`getWindowHeight`/`getScreenWidth`/`getScreenHeight`.
+  - *Auto-trigger:* Code imports `pressed` / `scrollTo` / `userPrefersDarkMode` / `htmlToText` / viewport getters, or user handles keyboard shortcuts, smooth scroll, dark mode, or strips HTML to text.
 
 ## Recipes
 
 - [Recipes](https://raw.githubusercontent.com/hassanzohdy/dom/main/skills/recipes.md): Per-page metadata in a SPA, multi-weight font loading, dark-mode CSS-variable theming, keyboard-shortcut tables, smooth-scrolling table of contents.
+  - *Auto-trigger:* Code combines two or more `@mongez/dom` features in one file, or user asks for a complete working example (SPA route metadata, theme switching, article OG, smooth-scroll TOC, consent-gated scripts).
 
 ## Quick rules
 

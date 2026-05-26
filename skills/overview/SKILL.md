@@ -1,7 +1,9 @@
 ---
 name: mongez-dom-overview
-description: High-level orientation to the @mongez/dom package — what it exports, the mental model for each feature area, and browser-only environment constraints.
-when_to_use: User is new to @mongez/dom and wants to understand what it does, asks about the full API surface, asks which import to use, or needs a mental model of how the package is organized. Also use when the user asks about SSR / server-side guard patterns for @mongez/dom.
+description: |
+  High-level orientation to the `@mongez/dom` package — what it exports, the mental model for each feature area, browser-only constraints, and SSR guard patterns.
+  TRIGGER when: code imports anything from `@mongez/dom` for the first time, or imports a wide slice like `setPageMeta`, `googleFont`, `cssVariable`, `scrollTo`, `pressed` together; user asks "what is @mongez/dom", "what does @mongez/dom do", "which import do I use for X", or "how do I use @mongez/dom on the server"; `import { ... } from "@mongez/dom"` appears in a fresh file with no prior context.
+  SKIP: user is already deep in a specific area — load `mongez-dom-metadata`, `mongez-dom-head-elements`, `mongez-dom-assets`, or `mongez-dom-interactions` instead; React-specific declarative head management belongs to `@mongez/react-helmet`, this package is framework-agnostic DOM; persistent storage (`@mongez/cache`) and routing (`@mongez/react-router`) are separate concerns.
 ---
 
 # Overview
