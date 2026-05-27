@@ -47,7 +47,7 @@ Pass any subset of fields. Each delegates to a single-purpose helper that's also
 These are also exported and can be called individually. Each is idempotent — repeat calls update the existing tag instead of creating duplicates.
 
 ```ts
-setTitle(title: string): string
+setTitle(title: string): string | void
 setDescription(description: string): string
 setKeywords(keywords: string | string[]): HTMLMetaElement | undefined
 setImage(imagePath: string): void
