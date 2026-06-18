@@ -1,6 +1,6 @@
 # Changelog — @mongez/dom
 
-## Unreleased
+## [1.2.4] — 2026-05-26
 
 ### Fixed
 
@@ -19,10 +19,6 @@
 - **CI.** GitHub Actions workflow: Node 18/20/22 on Ubuntu, plus Node 20 on Windows.
 - **`vitest.config.ts`** based on the @mongez/react-atom pattern. happy-dom environment, self-detecting sibling-alias helper (currently no aliases — kept for future use), and `disableJavaScriptFileLoading` / `disableCSSFileLoading` / `disableIframePageLoading` happy-dom settings so absolute-URL `<link>` and `<script>` tags don't trigger real network calls during the test run.
 - **`package.json` fields.** `description` (was generic), `keywords` (expanded), `repository`, `sideEffects: false`, `scripts.test`, `scripts.test:watch`, and devDependencies for `happy-dom`, `typescript`, `vitest`.
-
-### Changed
-
-Nothing in the runtime surface.
 
 ### Tests
 
