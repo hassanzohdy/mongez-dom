@@ -1,5 +1,11 @@
 # Changelog — @mongez/dom
 
+## [1.2.5] — 2026-08-17
+
+### Security
+
+- **`htmlToText` now parses in an inert document** (`src/htmlToText.ts`). It built the text by assigning the input to `innerHTML` on an element owned by the live `document`. Detaching that element is not protection: the assignment still starts resource fetches and can fire their handlers, so `htmlToText('<img src=x onerror=alert(1)>')` executed script. The function's entire purpose is stripping markup out of untrusted HTML — API descriptions, CMS bodies, user content — so every call site was passing exactly the input that triggers it. Parsing now happens inside `document.implementation.createHTMLDocument("")`, which has no browsing context and is therefore never "fully active", so `onerror`/`onload` handlers are never dispatched. Return value for ordinary input is unchanged.
+
 ## [1.2.4] — 2026-05-26
 
 ### Fixed

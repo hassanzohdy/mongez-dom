@@ -32,4 +32,30 @@ describe("htmlToText", () => {
     const result = htmlToText("<p>visible</p><script>alert('x')</script>");
     expect(result).toContain("visible");
   });
+
+  it("extracts text from a malicious payload without triggering onerror", () => {
+    (globalThis as { pwned?: boolean }).pwned = false;
+
+    const result = htmlToText("<img src=x onerror=\"globalThis.pwned=true\">");
+
+    expect(result).toBe("");
+    expect((globalThis as { pwned?: boolean }).pwned).toBe(false);
+
+    delete (globalThis as { pwned?: boolean }).pwned;
+  });
+
+  it("extracts text around a malicious svg onload payload without triggering it", () => {
+    (globalThis as { pwned?: boolean }).pwned = false;
+
+    const result = htmlToText("<p>hello</p><svg onload=\"globalThis.pwned=true\"></svg>");
+
+    expect(result).toContain("hello");
+    expect((globalThis as { pwned?: boolean }).pwned).toBe(false);
+
+    delete (globalThis as { pwned?: boolean }).pwned;
+  });
+
+  it("still extracts plain text for normal html", () => {
+    expect(htmlToText("<p>hi</p>")).toBe("hi");
+  });
 });

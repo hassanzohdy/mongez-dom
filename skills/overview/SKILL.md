@@ -1,35 +1,54 @@
 ---
 name: mongez-dom-overview
 description: |
-  High-level orientation to the `@mongez/dom` package — what it exports, the mental model for each feature area, browser-only constraints, and SSR guard patterns.
-  TRIGGER when: code imports anything from `@mongez/dom` for the first time, or imports a wide slice like `setPageMeta`, `googleFont`, `cssVariable`, `scrollTo`, `pressed` together; user asks "what is @mongez/dom", "what does @mongez/dom do", "which import do I use for X", or "how do I use @mongez/dom on the server"; `import { ... } from "@mongez/dom"` appears in a fresh file with no prior context.
-  SKIP: user is already deep in a specific area — load `mongez-dom-metadata`, `mongez-dom-head-elements`, `mongez-dom-assets`, or `mongez-dom-interactions` instead; React-specific declarative head management belongs to `@mongez/react-helmet`, this package is framework-agnostic DOM; persistent storage (`@mongez/cache`) and routing (`@mongez/react-router`) are separate concerns.
+  @mongez/dom — imperative browser helpers for page metadata, head elements, asset injection, CSS variables, viewport dimensions, and keyboard shortcuts. Zero-dependency, framework-agnostic, browser-only.
 ---
 
-# Overview
+# @mongez/dom — Overview
 
-`@mongez/dom` is the collection of imperative browser helpers that almost every front-end app ends up writing by hand. Flat function exports, no runtime dependencies, framework-agnostic. Drop it into React, Vue, Svelte, Astro, or vanilla JS — they all consume the same API.
+The collection of imperative browser helpers almost every front-end app ends up writing by hand. Flat function exports, zero runtime dependencies, framework-agnostic. Drop it into React, Vue, Svelte, Astro, or vanilla JS — they all consume the same API.
 
-The package targets the browser. There is no SSR layer.
+## Highlighted features
+
+<div class="mongez-highlights">
+
+<div class="mongez-highlight" data-accent="ice">
+  <svg class="mongez-highlight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+  <h3>Page metadata, one call</h3>
+  <p><code>setPageMeta({...})</code> fans out into title, description, image, OG/Twitter, canonical, theme color — every <code>&lt;head&gt;</code> tag at once.</p>
+</div>
+
+<div class="mongez-highlight" data-accent="ice">
+  <svg class="mongez-highlight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7V4h16v3"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+  <h3>Font + stylesheet injection</h3>
+  <p><code>googleFont(url, id)</code>, <code>styleSheet(href, id)</code>, <code>loadFont(family, ...)</code> — id-based so you can swap themes later.</p>
+</div>
+
+<div class="mongez-highlight" data-accent="fire">
+  <svg class="mongez-highlight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  <h3>CSS variables</h3>
+  <p><code>cssVariable("--color-primary", "#0a84ff")</code>, <code>getCssVariable("--gap")</code> — read/write CSS custom properties on <code>:root</code> or a given element.</p>
+</div>
+
+<div class="mongez-highlight" data-accent="bolt">
+  <svg class="mongez-highlight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+  <h3>Viewport + keyboard</h3>
+  <p>One-liners around <code>window.outerWidth</code>, <code>window.screen.width</code>, etc. <code>pressed(event, ESC_KEY)</code> normalises legacy <code>keyCode</code> handling.</p>
+</div>
+
+</div>
 
 ## Install
 
 ```sh
-# npm
 npm install @mongez/dom
-
-# yarn
-yarn add @mongez/dom
-
-# pnpm
-pnpm add @mongez/dom
+# or: yarn add @mongez/dom
+# or: pnpm add @mongez/dom
 ```
 
 Zero runtime dependencies. Browser-only — server use throws (see Environment below).
 
-## Quick example
-
-A snapshot of the breadth — page metadata, fonts, CSS variables, and smooth-scroll all in one import:
+## Quick peek
 
 ```ts
 import { setPageMeta, googleFont, cssVariable, scrollTo } from "@mongez/dom";
@@ -47,31 +66,7 @@ cssVariable("--color-primary", "#0a84ff");
 scrollTo("#section-features");
 ```
 
-## Import pattern
-
-```ts
-import {
-  // metadata
-  setPageMeta, setTitle, setDescription, setKeywords,
-  setImage, setPageColor, setFavIcon, setCanonicalUrl, getMetaData,
-  // attributes
-  setHTMLAttributes, setElementAttributes, getElementAttributes,
-  // head builders
-  createHeadElement, createNewMeta, meta, itemprop, metaLink, twitter, og,
-  // assets
-  styleSheet, googleFont, loadFont, loadScript,
-  // css variables
-  cssVariable, setCssVariable, getCssVariable,
-  // viewport
-  getWindowWidth, getWindowHeight, getScreenWidth, getScreenHeight,
-  // keyboard
-  pressed, TAB_KEY, ESC_KEY, ENTER_KEY, CONTROL_KEY,
-  // misc
-  scrollTo, htmlToText, userPrefersDarkMode,
-  // types
-  type MetaData, type AttributesList, type FontOptions, type FontWeightSetup,
-} from "@mongez/dom";
-```
+Page metadata, fonts, CSS variables, smooth-scroll — all in one import.
 
 ## Environment
 
@@ -89,28 +84,24 @@ In React, prefer client-only effects:
 useEffect(() => setTitle(props.title), [props.title]);
 ```
 
-## Mental model
-
-| Area | What it does | Where state lives |
-|---|---|---|
-| Metadata | Reads/writes `<head>` tags | DOM is the source of truth. The `currentMetaData` module-level singleton is a write-through cache for change detection. |
-| Head builders | Create / reuse `<meta>` and `<link>` tags | DOM. |
-| Assets | Inject `<link rel=stylesheet>`, `<script>`, and `FontFace`s | DOM + `document.fonts`. |
-| CSS variables | Read/write CSS custom properties on `:root` or a given element | DOM (element.style). |
-| Viewport | One-line getters around `window.outerWidth`, `window.screen.width`, etc. | None — live reads. |
-| Keyboard | Compare `event.keyCode \|\| event.charCode` to a constant | None — pure helper. |
-| Misc | Smooth scroll, script injection, HTML-to-text, dark-mode detection | DOM / `matchMedia`. |
-
 ## Scope boundaries
 
 | Concern | Lives in | Why |
 |---|---|---|
-| React hooks / declarative metadata | `@mongez/react-helmet` | This package is framework-agnostic |
-| Persistent storage (localStorage / cookies) | `@mongez/cache` | Different concern |
-| Routing | `@mongez/react-router` | Different concern |
+| React hooks / declarative metadata | [`@mongez/react-helmet`](/react-helmet/overview/) | This package is framework-agnostic |
+| Persistent storage (localStorage / cookies) | [`@mongez/cache`](/cache/overview/) | Different concern |
+| Routing | [`@mongez/react-router`](/react-router/overview/) | Different concern |
 
 ## Idioms
 
 - **Call `setPageMeta` once per page-view.** It fans out into the seven setter helpers internally. Cheap to repeat — each setter short-circuits when the value matches the last seen value.
-- **Use ids with `styleSheet` and `googleFont`** for any link you might want to replace later (theme switcher, A/B framework swap, …). Without an id you can't find the link again.
+- **Use ids with `styleSheet` and `googleFont`** for any link you might want to replace later (theme switcher, A/B framework swap). Without an id you can't find the link again.
 - **No event subscriptions.** Helpers here are fire-and-forget. If you need to react to attribute changes, use a `MutationObserver` directly.
+
+## Where to go next
+
+- **[Metadata](../metadata/)** — `setPageMeta`, title/description/image setters, OG/Twitter
+- **[Head elements](../head-elements/)** — `createHeadElement`, `meta`, `metaLink`, custom tags
+- **[Assets](../assets/)** — `styleSheet`, `googleFont`, `loadFont`, `loadScript`
+- **[Interactions](../interactions/)** — viewport, keyboard, scroll, dark-mode detection
+- **[Recipes](../recipes/)** — common patterns

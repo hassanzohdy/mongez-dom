@@ -40,6 +40,11 @@ export function createNewMeta(props) {
 /**
  * Update html element attributes
  *
+ * Security note: attribute *keys* here must never come from untrusted
+ * input — this sets attributes (including `on*` event handlers) with no
+ * allowlist. Only pass keys that are hardcoded or otherwise developer
+ * controlled.
+ *
  * @param {AttributesList} attributes
  * @returns {void}
  */
@@ -49,6 +54,11 @@ export function setHTMLAttributes(attributes: AttributesList): void {
 
 /**
  * Set the given attributes to the given element
+ *
+ * Security note: attribute *keys* here must never come from untrusted
+ * input — this sets attributes (including `on*` event handlers) with no
+ * allowlist. Only pass keys that are hardcoded or otherwise developer
+ * controlled.
  *
  * @param {HTMLElement} element
  * @param {AttributesList} attributes
@@ -80,6 +90,10 @@ export function getElementAttributes(element: HTMLElement): AttributesList {
 
 /**
  * Create and append the given tag to the head
+ *
+ * Security note: `props` keys must never come from untrusted input — this
+ * sets attributes (including `on*` event handlers) with no allowlist. Only
+ * pass keys that are hardcoded or otherwise developer controlled.
  *
  * @param   {String} tagName
  * @param   {Object} props
