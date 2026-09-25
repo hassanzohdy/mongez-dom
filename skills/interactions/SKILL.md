@@ -60,7 +60,6 @@ Notes:
 - Always smooth — there's no way to opt out without bypassing this helper.
 - Only the first match is scrolled to. Subsequent matches are ignored.
 - Passing a missing selector is safe (no throw, no console warning).
-- Honors the `prefers-reduced-motion` media query at the user-agent level — browsers fall back to instant scroll when reduced motion is requested.
 
 ## Dark mode
 
@@ -89,7 +88,7 @@ mq.addEventListener("change", () => applyTheme());
 htmlToText(html: string): string
 ```
 
-Parses `html` into a throwaway `<div>` via `innerHTML` and returns its `textContent`. Strips all tags; decodes HTML entities; drops `<script>` and `<style>` content.
+Parses `html` into a throwaway `<div>` via `innerHTML` and returns its `textContent`. It strips tags and decodes HTML entities. Because this returns `textContent`, text inside `<script>` and `<style>` is included; remove those elements first if that text must be excluded.
 
 ```ts
 import { htmlToText } from "@mongez/dom";
@@ -99,7 +98,7 @@ htmlToText("&amp; &lt;ok&gt;");                   // "& <ok>"
 htmlToText("<p>One <strong>two</strong></p>");    // "One two"
 ```
 
-Useful for plain-text previews of rich content, search excerpts, or computing character counts.
+Useful for plain-text previews of trusted rich content, search excerpts, or computing character counts. Remove script and style elements before calling it if their contents can appear in the input.
 
 The string is parsed inside an **inert document** (`document.implementation.createHTMLDocument`), which has no browsing context — so neither `<script>` nor resource-triggered handlers like `<img onerror>` / `<svg onload>` run while extracting the text. It is still **not** a sanitizer: it returns text, never HTML. If you're rendering user input as markup, use a real sanitizer (`DOMPurify`, server-side validation).
 

@@ -128,4 +128,4 @@ function setArticleMeta(article: { author: string; publishedAt: string; locales:
 }
 ```
 
-Repeat calls update existing tags via the same selector rules — no duplicates.
+`meta()` updates one tag per property. `metaLink()` has one tag per `rel`, so this loop leaves the last `alternate` link in place; use `createHeadElement("link", ...)` when a page needs multiple locale alternates.

@@ -132,7 +132,7 @@ setCssVariable(name: string, value: string, element?: HTMLElement): void   // de
 getCssVariable(name: string, element?: HTMLElement): string                // defaults to :root
 ```
 
-The single-function `cssVariable` is dual-purpose: omit `value` to read, supply `value` to write. Both branches target `:root` (i.e. `<html>`). For per-element scoping, use the explicit `setCssVariable` / `getCssVariable`.
+The single-function `cssVariable` is dual-purpose: omit a truthy `value` to read, supply a truthy value to write. Both branches target `:root` (i.e. `<html>`). For per-element scoping, use the explicit `setCssVariable` / `getCssVariable`.
 
 ```ts
 import { cssVariable, setCssVariable, getCssVariable } from "@mongez/dom";
@@ -174,3 +174,4 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", app
 - **`loadFont`'s `weight: "light"` → `"300"` mapping is silent.** Other named weights (`"normal"`, `"bold"`, …) pass through verbatim. The CSS Font Module Level 4 keywords aren't all valid for the FontFace API; if you're using anything other than `"normal" | "bold" | "light"`, use a numeric value like `"500"`.
 - **`loadScript` doesn't dedupe.** Calling it twice with the same `src` appends two `<script>` tags. Track loaded scripts in your own caller if you need idempotence.
 - **CSS variables are case-sensitive.** `cssVariable("--Color-Primary")` is different from `cssVariable("--color-primary")`.
+- **`cssVariable(name, "")` reads instead of clearing the variable.** Use `setCssVariable(name, "")` when you need to write an empty value.

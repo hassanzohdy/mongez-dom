@@ -69,7 +69,7 @@ getMetaData(): MetaData
 getMetaData(key: keyof MetaData): MetaData[K]
 ```
 
-Returns the internal `currentMetaData` singleton — the values most recently passed to the setters. Reflects setter calls only; if your code wrote to the DOM directly via `document.head.querySelector(...).setAttribute(...)`, `getMetaData` won't see it.
+Returns the internal `currentMetaData` singleton, not a readback of the DOM. It tracks title, URL, keywords, image, color, and favicon setters; `setDescription()` and the `type` option write DOM tags but do not update this object. Direct DOM writes are never reflected.
 
 ```ts
 import { setTitle, getMetaData } from "@mongez/dom";
@@ -129,7 +129,8 @@ If you need the React-idiomatic, declarative version of this, see `@mongez/react
 
 ## Gotchas
 
-- **`setTitle("X")` called twice does not emit duplicate tags** — the second call short-circuits when the title matches the last cached value.
+- **`setTitle("X")` called twice does not emit duplicate tags** — the second call short-circuits when the title matches the last cached value. Other setters reuse their matching DOM tags where applicable.
+- **Empty strings are skipped by `setPageMeta`.** Its fields are checked for truthiness, so use the individual DOM APIs if you need to intentionally write an empty value.
 - **Arrays of keywords are joined with a literal `,`** — no spaces. If you want `"foo, bar, baz"`, pre-join with `", "` yourself: `setKeywords(keys.join(", "))`.
 - **`setImage` is for social images.** `meta[property="image"]` is unusual — most consumers only look at `og:image` and `twitter:image`. The duplicate `image` tag is harmless but undocumented.
 - **`setPageColor` emits `<meta name="theme-color">`** — the HTML-spec form user agents honor. `meta()` special-cases `"theme-color"` (alongside `"keywords"` and `"description"`) so the attribute is `name=`, not `property=`.

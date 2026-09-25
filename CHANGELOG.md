@@ -1,5 +1,10 @@
 # Changelog — @mongez/dom
 
+## [1.2.6] — 2026-09-25
+
+### Changed
+- Added a grouped Agent Kit skills index for topic-based discovery.
+
 ## [1.2.5] — 2026-08-17
 
 ### Security
