@@ -37,6 +37,7 @@ Every export ships from the package root.
 4. `meta(name, value)` uses `name=` for `description` and `keywords` only; everything else lands on `property=`.
 5. `styleSheet(href, id)` and `googleFont(href, id)` reuse a link by its id when provided. Without an id, a new link with `id="link-<random>"` is created on each call.
 6. `setHTMLAttributes` is `setElementAttributes(document.documentElement, ...)`.
+7. **Attribute names are written exactly as given** (`setElementAttributes`, `setHTMLAttributes`, `createHeadElement`, `createNewMeta`, `metaLink`'s `otherAttributes`): `on*` keys such as `onclick` / `onerror` become live event-handler attributes, so never pass untrusted attribute names. `@mongez/react-helmet` strips `/^on/i` keys.
 7. `pressed(event, key)` reads `event.keyCode || event.charCode`. The exported `*_KEY` constants are numeric keycodes.
 
 ## Known bugs (see CHANGELOG)

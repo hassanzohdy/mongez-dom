@@ -111,6 +111,8 @@ getElementAttributes(button);
 
 `getElementAttributes` walks the live `element.attributes` collection and returns a plain object. `disabled=""` is preserved as the empty string — attribute presence is not collapsed to a boolean.
 
+**Security: attribute names are written exactly as given.** `setElementAttributes`, `setHTMLAttributes`, `createHeadElement` (and `createNewMeta`) and `metaLink`'s `otherAttributes` call `setAttribute` with no filtering, so `on*` keys such as `onclick`, `onload` or `onerror` become live event-handler attributes. Never pass untrusted attribute names (or an untrusted object spread into them); only values you control, or a key allowlist. `@mongez/react-helmet` is an example of the fix: it drops every key matching `/^on/i` before calling `setHTMLAttributes`.
+
 ## Composition example — custom OG sub-tree
 
 The high-level `setPageMeta` covers the common social fields but not the long tail (article author, article published_time, locale alternates, …). Compose your own helper from `meta` and `metaLink`:

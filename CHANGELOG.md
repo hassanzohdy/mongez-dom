@@ -1,5 +1,11 @@
 # Changelog — @mongez/dom
 
+## [1.2.7] — 2026-11-16
+
+### Documentation
+
+- `setElementAttributes`, `setHTMLAttributes`, `createHeadElement` and `metaLink` apply attribute names exactly as given, including `onclick` / `onload` / `onerror`. README and the head-elements skill now warn never to pass untrusted attribute names, and point to `@mongez/react-helmet`, which strips `on*` keys.
+
 ## [1.2.6] — 2026-09-25
 
 ### Changed

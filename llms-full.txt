@@ -143,6 +143,8 @@ type AttributesList = { [attributeKey: string]: any };
 
 Plain pass-through to `element.setAttribute(key, value)` per entry. `getElementAttributes` walks `element.attributes` and returns a `Record<string, string>`.
 
+**Security: attribute names are written exactly as given.** `setElementAttributes`, `setHTMLAttributes`, `createHeadElement` (and `createNewMeta`) and `metaLink`'s `otherAttributes` call `setAttribute` with no filtering, so `on*` keys such as `onclick`, `onload` or `onerror` become live event-handler attributes. Never pass untrusted attribute names (or an untrusted object spread into them); only values you control, or a key allowlist. `@mongez/react-helmet` is an example of the fix: it drops every key matching `/^on/i` before calling `setHTMLAttributes`.
+
 ## Head element building — low level
 
 ```ts

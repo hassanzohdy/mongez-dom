@@ -272,6 +272,8 @@ getElementAttributes(button);
 
 `setHTMLAttributes` is `setElementAttributes(document.documentElement, ...)`. `getElementAttributes` walks the live `element.attributes` collection and returns a `Record<string, string>` — empty attributes like `disabled=""` are preserved as the empty string, not collapsed to a boolean.
 
+> **Security: attribute names are written exactly as given.** `setElementAttributes`, `setHTMLAttributes`, `createHeadElement` (and `createNewMeta`) and `metaLink`'s `otherAttributes` call `setAttribute` with no filtering, so `on*` keys such as `onclick`, `onload` or `onerror` become live event-handler attributes. Never pass untrusted attribute names (or an untrusted object spread into them); only values you control, or a key allowlist. `@mongez/react-helmet` is an example of the fix: it drops every key matching `/^on/i` before calling `setHTMLAttributes`.
+
 ---
 
 ## Stylesheets, fonts, and scripts
